@@ -22,7 +22,7 @@ interface Response {
 
 const SignUp = () => {
     const [token, setToken] = useState<string | null>("");
-    const [openModel,setOpenModel]=useState<boolean>(false)
+    const [openModel, setOpenModel] = useState<boolean>(true)
     const navigate: any = useNavigation();
     const toast = useToast();
 
@@ -47,6 +47,7 @@ const SignUp = () => {
         lastName: "",
         contactNumber: 0,
     })
+    const [otp,setOtp]=useState<string>('')
 
 
     const [response, setResponse] = useState<Response>({
@@ -134,8 +135,8 @@ const SignUp = () => {
                             paddingLeft: 20,
                             paddingRight: 20,
                         }}
-                        onChangeText={(e)=>{
-                            setInfos({...infos, firstName: e })
+                        onChangeText={(e) => {
+                            setInfos({ ...infos, firstName: e })
                         }}
                     />
                 </View>
@@ -167,8 +168,8 @@ const SignUp = () => {
                             paddingLeft: 20,
                             paddingRight: 20,
                         }}
-                        onChangeText={(e)=>{
-                            setInfos({...infos, lastName: e })
+                        onChangeText={(e) => {
+                            setInfos({ ...infos, lastName: e })
                         }}
                     />
                 </View>
@@ -192,17 +193,17 @@ const SignUp = () => {
                         <AntDesign name="mail" size={20} color="white" />
                     </View>
                     <TextInput placeholder='Enter your email address' style={{
-                    padding: 5,
-                    backgroundColor: "#ebeaea",
-                    height: 50,
-                    color: "black",
-                    borderRadius: 10,
-                    fontSize: 14,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                }} keyboardType="email-address" onChangeText={(e)=>{
-                    setInfos({...infos, email: e })
-                }} />
+                        padding: 5,
+                        backgroundColor: "#ebeaea",
+                        height: 50,
+                        color: "black",
+                        borderRadius: 10,
+                        fontSize: 14,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                    }} keyboardType="email-address" onChangeText={(e) => {
+                        setInfos({ ...infos, email: e })
+                    }} />
                 </View>
 
 
@@ -211,7 +212,7 @@ const SignUp = () => {
                     padding: 5,
                     borderRadius: 10,
                     height: 50,
-                    marginTop:5
+                    marginTop: 5
                 }}>
                     <View style={{
                         backgroundColor: 'green',
@@ -226,49 +227,34 @@ const SignUp = () => {
                         <AntDesign name="mobile1" size={20} color="white" />
                     </View>
                     <TextInput placeholder='Enter your email address' style={{
-                    padding: 5,
-                    backgroundColor: "#ebeaea",
-                    height: 50,
-                    color: "black",
-                    borderRadius: 10,
-                    fontSize: 14,
-                    paddingLeft: 20,
-                    paddingRight: 20,
-                }} keyboardType="name-phone-pad" onChangeText={(e)=>{
-                    setInfos({...infos, contactNumber: Number(e) })
-                }} />
+                        padding: 5,
+                        backgroundColor: "#ebeaea",
+                        height: 50,
+                        color: "black",
+                        borderRadius: 10,
+                        fontSize: 14,
+                        paddingLeft: 20,
+                        paddingRight: 20,
+                    }} keyboardType="name-phone-pad" onChangeText={(e) => {
+                        setInfos({ ...infos, contactNumber: Number(e) })
+                    }} />
                 </View>
 
-                <TouchableOpacity onPress={handleRegister}>
+                <TouchableOpacity disabled={!infos.email || !infos.firstName || !infos.firstName || !infos.contactNumber} onPress={handleRegister}>
                     <Text style={{
                         marginTop: 10,
                         padding: 10,
                         borderRadius: 10,
                         textAlign: "center",
                         fontWeight: 'bold',
-                        backgroundColor: "#007bff",
+                        backgroundColor: !infos.email || !infos.firstName || !infos.firstName || !infos.contactNumber ?"gray":"#007bff",
                         fontSize: 18,
                         color: "white"
                     }}>
                         Register Account
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{
-                    setOpenModel(true);
-                }}>
-                    <Text style={{
-                        marginTop: 10,
-                        padding: 10,
-                        borderRadius: 10,
-                        textAlign: "center",
-                        fontWeight: 'bold',
-                        backgroundColor: "#007bff",
-                        fontSize: 18,
-                        color: "white"
-                    }}>
-                       Open Model
-                    </Text>
-                </TouchableOpacity>
+                
                 <TouchableOpacity onPress={() => {
                     navigate.navigate('SignIn')
                 }}>
@@ -286,20 +272,85 @@ const SignUp = () => {
                 </TouchableOpacity>
             </View>
 
-                    {
-                        openModel && (
-                            <View style={{
-                                position:"absolute",
-                                top:0,
-                                left:0,
-                                right:0,
-                                bottom:0,
-                                backgroundColor: 'rgba(0,0,0,0.5)',
+            {
+                openModel && (
+                    <View style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        backgroundColor: 'rgba(7, 7, 7, 0.5)',
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 20
+                    }}>
+                        <View style={{
+                            backgroundColor: '#ebeaea',
+                            padding: 20,
+                            borderRadius: 20,
+                            display: 'flex',
+                            flexDirection: "column",
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            width: '100%',
+                            position: 'relative'
+                        }}>
+                            <TouchableOpacity style={{
+                                position: 'absolute',
+                                right: 20,
+                                // marginBottom:20
+                            }} onPress={() => {
+                                setOpenModel(false);
                             }}>
-                                <OTPTextView inputCount={6} />
-                            </View>
-                        )
-                    }
+                                <Text style={{
+                                    marginTop: 10,
+                                    padding: 10,
+                                    borderRadius: 10,
+                                    textAlign: "right",
+                                    fontWeight: 'bold',
+                                    backgroundColor: "#007bff",
+                                    fontSize: 18,
+                                    color: "white"
+                                }}>
+                                    X
+                                </Text>
+                            </TouchableOpacity>
+                            <Text style={{
+                                fontSize: 30,
+                                fontWeight: 'bold',
+                                color: 'black',
+                            }}>Verify OTP</Text>
+                            <OTPTextView textInputStyle={{
+                                cursor: 'pointer',
+                                
+                            }}  handleTextChange={(e)=>{
+                                setOtp(e)
+                            }} inputCount={6} />
+                            <TouchableOpacity disabled={!otp} style={{
+                                width:'100%'
+                            }} onPress={()=>{
+                                console.log("OTP: ",otp);
+                            }}>
+                                <Text style={{
+                                    marginTop: 10,
+                                    padding: 10,
+                                    borderRadius: 10,
+                                    textAlign: "center",
+                                    fontWeight: 'bold',
+                                    backgroundColor: "#007bff",
+                                    fontSize: 18,
+                                    color: "white"
+                                }}>
+                                    Verify OTP
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )
+            }
         </View>
     )
 }
