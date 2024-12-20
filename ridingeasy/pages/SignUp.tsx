@@ -22,7 +22,7 @@ interface Response {
 
 const SignUp = () => {
     const [token, setToken] = useState<string | null>("");
-    const [openModel, setOpenModel] = useState<boolean>(true)
+    const [openModel, setOpenModel] = useState<boolean>(false)
     const navigate: any = useNavigation();
     const toast = useToast();
 
@@ -75,6 +75,36 @@ const SignUp = () => {
                 placement: 'top',
             });
             setOpenModel(true);
+        } else {
+            toast.show(res.message, {
+                type: 'error',
+                placement: 'top',
+            });
+        }
+    }
+
+    const handleVerifyOTP=async()=>{
+        const API = Platform.OS === 'android'? ("http://10.0.2.2:8080/user") : ("http://localhost:8080/user");
+
+        let res: any = await fetch(`${API}/verify-new-account`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                email: infos.email,
+                otp: otp,
+             }),
+        });
+        const status = res.status;
+        res = await res.json();
+        if (status === 200) {
+            toast.show(res.message, {
+                type:'success',
+                placement: 'top',
+            });
+            setOpenModel(false);
+            navigate.navigate('Home');
         } else {
             toast.show(res.message, {
                 type: 'error',
@@ -302,9 +332,7 @@ const SignUp = () => {
                                 position: 'absolute',
                                 right: 20,
                                 // marginBottom:20
-                            }} onPress={() => {
-                                setOpenModel(false);
-                            }}>
+                            }} onPress={handleVerifyOTP}>
                                 <Text style={{
                                     marginTop: 10,
                                     padding: 10,
